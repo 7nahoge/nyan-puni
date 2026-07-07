@@ -488,7 +488,9 @@ document.addEventListener("keydown",e=>{
 // touch
 let tx,ty;
 const SWIPE = 30;
+const TOUCH_MOVE_INTERVAL = 160;
 const TOUCH_DROP_INTERVAL = 250;
+let lastTouchMove = 0;
 let lastTouchDrop = 0;
 
 c.addEventListener("touchstart",e=>{
@@ -502,18 +504,21 @@ c.addEventListener("touchmove",e=>{
 
   const dx=e.touches[0].clientX - tx;
   const dy=e.touches[0].clientY - ty;
+  const now = Date.now();
 
   if(Math.abs(dx)>Math.abs(dy)){
-    if(dx>SWIPE){
+    if(dx>SWIPE && now - lastTouchMove > TOUCH_MOVE_INTERVAL){
       move(1,0);
+      lastTouchMove = now;
       tx=e.touches[0].clientX;
-    }else if(dx<-SWIPE){
-     move(-1,0);
+    }else if(dx<-SWIPE && now - lastTouchMove > TOUCH_MOVE_INTERVAL){
+      move(-1,0);
+      lastTouchMove = now;
       tx=e.touches[0].clientX;
     }
-  }else if(dy>SWIPE && Date.now() - lastTouchDrop > TOUCH_DROP_INTERVAL){
+  }else if(dy>SWIPE && now - lastTouchDrop > TOUCH_DROP_INTERVAL){
     drop();
-    lastTouchDrop = Date.now();
+    lastTouchDrop = now;
     ty=e.touches[0].clientY;
   }
 },{passive:false});
