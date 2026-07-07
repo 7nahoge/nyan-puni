@@ -8,7 +8,7 @@ const chainLabel = document.getElementById("chain");
 const COL = 6;
 const ROW = 10;
 const SIZE = 60;
-const DROP_INTERVAL = 500; // 500msごとに1マス
+const DROP_INTERVAL = 450; // 450msごとに1マス
 
 c.width = COL * SIZE;
 c.height = ROW * SIZE;
@@ -449,20 +449,35 @@ document.addEventListener("keydown",e=>{
 });
 
 // touch
-let sx,sy;
-c.addEventListener("touchstart",e=>{
-  sx=e.touches[0].clientX;
-  sy=e.touches[0].clientY;
-});
+let tx,ty;
+const SWIPE = 30;
 
-c.addEventListener("touchend",e=>{
-  let dx=e.changedTouches[0].clientX - sx;
-  let dy=e.changedTouches[0].clientY - sy;
+c.addEventListener("touchstart",e=>{
+  e.preventDefault();
+  tx=e.touches[0].clientX;
+  ty=e.touches[0].clientY;
+},{passive:false});
+
+c.addEventListener("touchmove",e=>{
+  e.preventDefault();
+
+  const dx=e.touches[0].clientX - tx;
+  const dy=e.touches[0].clientY - ty;
 
   if(Math.abs(dx)>Math.abs(dy)){
-    if(dx>30) move(1,0);
-    else if(dx<-30) move(-1,0);
-  } else {
-    if(dy>30) drop();
+    if(dx>SWIPE){
+      move(1,0);
+      tx=e.touches[0].clientX;
+    }else if(dx<-SWIPE){
+      move(-1,0);
+      tx=e.touches[0].clientX;
+    }
+  }else if(dy>SWIPE){
+    drop();
+    ty=e.touches[0].clientY;
   }
-});
+},{passive:false});
+
+c.addEventListener("touchend",e=>{
+  e.preventDefault();
+},{passive:false});
