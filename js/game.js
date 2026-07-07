@@ -474,7 +474,6 @@ c.addEventListener("touchmove",e=>{
      move(-1,0);
       tx=e.touches[0].clientX;
     }
-  }else if(dy>SWIPE){
   }else if(dy>SWIPE && Date.now() - lastTouchDrop > TOUCH_DROP_INTERVAL){
     drop();
     lastTouchDrop = Date.now();
