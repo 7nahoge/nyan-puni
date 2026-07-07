@@ -488,7 +488,7 @@ document.addEventListener("keydown",e=>{
 // touch
 let tx,ty;
 const SWIPE = 30;
-const TOUCH_DROP_INTERVAL = 200;
+const TOUCH_DROP_INTERVAL = 250;
 let lastTouchDrop = 0;
 
 c.addEventListener("touchstart",e=>{
