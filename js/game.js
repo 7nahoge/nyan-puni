@@ -4,6 +4,10 @@ const ctx = c.getContext("2d");
 const startBtn = document.getElementById("startBtn");
 const scoreLabel = document.getElementById("score");
 const chainLabel = document.getElementById("chain");
+const gameOverPopup = document.getElementById("gameOverPopup");
+const finalScore = document.getElementById("finalScore");
+const restartBtn = document.getElementById("restartBtn");
+const endBtn = document.getElementById("endBtn");
 
 const COL = 6;
 const ROW = 10;
@@ -58,10 +62,11 @@ function initGrid(){
   );
 }
 
-document.getElementById("startBtn").onclick = async ()=>{
+async function startGame(){
   cancelAnimationFrame(animationId);
 
   running = false;
+  hideGameOverPopup();
 
   loadImages();
   initGrid();
@@ -79,7 +84,25 @@ document.getElementById("startBtn").onclick = async ()=>{
 
   spawn();
   animationId = requestAnimationFrame(loop);
-};
+}
+
+startBtn.onclick = startGame;
+restartBtn.onclick = startGame;
+endBtn.onclick = endGame;
+
+function endGame(){
+  cancelAnimationFrame(animationId);
+
+  running = false;
+  current = null;
+  score = 0;
+  chain = 0;
+  effects = [];
+
+  hideGameOverPopup();
+  updateUI();
+  ctx.clearRect(0,0,c.width,c.height);
+}
 
 function waitImagesLoaded(){
 
@@ -150,9 +173,23 @@ function gameOver(){
   running = false;
   current = null;
 
-  alert(
-    "GAME OVER\nSCORE:"+score
-  );
+  showGameOverPopup();
+}
+
+function showGameOverPopup(){
+  if(finalScore){
+    finalScore.innerText = "SCORE: " + score;
+  }
+
+  if(gameOverPopup){
+    gameOverPopup.classList.remove("hidden");
+  }
+}
+
+function hideGameOverPopup(){
+  if(gameOverPopup){
+    gameOverPopup.classList.add("hidden");
+  }
 }
 
 function can(x,y){
