@@ -12,7 +12,7 @@ const endBtn = document.getElementById("endBtn");
 const COL = 6;
 const ROW = 10;
 const SIZE = 60;
-const DROP_INTERVAL = 450; // 450msごとに1マス
+const DROP_INTERVAL = 500; // 500msごとに1マス
 
 c.width = COL * SIZE;
 c.height = ROW * SIZE;
@@ -488,8 +488,8 @@ document.addEventListener("keydown",e=>{
 // touch
 let tx,ty;
 const SWIPE = 30;
-const TOUCH_MOVE_INTERVAL = 300;
-const TOUCH_DROP_INTERVAL = 300;
+const TOUCH_MOVE_INTERVAL = 200;
+const TOUCH_DROP_INTERVAL = 200;
 let lastTouchMove = 0;
 let lastTouchDrop = 0;
 
